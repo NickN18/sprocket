@@ -14,7 +14,7 @@ while(1 == 1)
     switch(dir)
         case {'A', 'a'}
             brick.MoveMotor('D', 30);
-            brick.MoveMotor('B', 100);
+            brick.MoveMotor('B', -100);
                         
         case {'W', 'w'}
             brick.MoveMotor('D', -30);
@@ -22,7 +22,7 @@ while(1 == 1)
             
         case {'D', 'd'}
             brick.MoveMotor('D', 30);
-            brick.MoveMotor('B', -100);
+            brick.MoveMotor('B', 100);
 
           %Port D is the clutch, Port B is the motor  
         case {'S', 's'}
