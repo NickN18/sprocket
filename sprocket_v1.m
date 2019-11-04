@@ -11,28 +11,29 @@ while(1 == 1)
 
     %Port D is the clutch, Port B is the motor
     
-    while(dir == 'A' || dir == 'a')
-         brick.MoveMotor('D', 30);
-         brick.MoveMotor('B', 100);
+    switch(dir)
+        case {'A', 'a'}
+            brick.MoveMotor('D', 30);
+            brick.MoveMotor('B', 100);
+                        
+        case {'W', 'w'}
+            brick.MoveMotor('D', -30);
+            brick.MoveMotor('B', -100);
+            
+        case {'D', 'd'}
+            brick.MoveMotor('D', 30);
+            brick.MoveMotor('B', -100);
+
+          %Port D is the clutch, Port B is the motor  
+        case {'S', 's'}
+            brick.MoveMotor('D', -30);
+            brick.MoveMotor('B', 100);
+            
+        case {'Q', 'q'}
+            brick.StopMotor('D');
+            brick.StopMotor('B');
+           
     end
-    
-    while(dir == 'W' || dir == 'w')
-         brick.MoveMotor('D', -30);
-         brick.MoveMotor('B', -100);
-    end
-    
-    while(dir == 'S' || dir == 's')
-          brick.MoveMotor('D', -30);
-          brick.MoveMotor('B', 100);
-    end
-    
-    while(dir == 'D' || dir == 'd')
-          brick.MoveMotor('D', 30);
-          brick.MoveMotor('B', -100);     
-    end
-    
-    brick.StopMotor('D');
-    brick.StopMotor('B');
 
 end
 
