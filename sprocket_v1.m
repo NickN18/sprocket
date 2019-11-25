@@ -6,35 +6,41 @@ clear all
 
 brick = ConnectBrick('EV33');
 
+%{
 while(1 == 1)
+    
     dir = input("Enter a direction (W: Go forward, A: Turn left, S: Go backwards, D: Turn right): ", 's');
 
     %Port D is the clutch, Port B is the motor
     
-    while(dir == 'A' || dir == 'a')
-         brick.MoveMotor('D', 30);
-         brick.MoveMotor('B', 100);
+    switch(dir)
+        case {'A', 'a'} %Turn left
+            
+            brick.MoveMotor('D', 30); %This line changes the direction in which the clutch moves, allowing sprocket to turn
+            brick.MoveMotorAngleRel('B', -100, 1100, 'Brake'); %90 degrees
+            
+        case {'W', 'w'} %Go forward
+            brick.MoveMotor('D', -30);
+            brick.MoveMotor('B', -100);
+            
+        case {'D', 'd'} %Turn right
+            brick.MoveMotor('D', 30);
+            brick.MoveMotorAngleRel('B', 100, 1150, 'Brake');
+
+          %Port D is the clutch, Port B is the motor  
+        case {'S', 's'} %Go backwards
+            brick.MoveMotor('D', -30);
+            brick.MoveMotor('B', 100);
+            
+        case {'Q', 'q'}
+            brick.StopMotor('D');
+            brick.StopMotor('B');
+            
     end
-    
-    while(dir == 'W' || dir == 'w')
-         brick.MoveMotor('D', -30);
-         brick.MoveMotor('B', -100);
-    end
-    
-    while(dir == 'S' || dir == 's')
-          brick.MoveMotor('D', -30);
-          brick.MoveMotor('B', 100);
-    end
-    
-    while(dir == 'D' || dir == 'd')
-          brick.MoveMotor('D', 30);
-          brick.MoveMotor('B', -100);     
-    end
-    
-    brick.StopMotor('D');
-    brick.StopMotor('B');
 
 end
+
+%}
 
 %As the robot moves, the drive motor pushes the clutch back and keeps it in
 %neutral
@@ -53,8 +59,43 @@ end
 % The maze algorithm used will be the right wall follower. The ultrasonic
 % sensor will be positioned on the right side of the robot. 
 
+distance = brick.UltrasonicDist(1);
 
+while(1==1)
+   
+     dir = input("Failsafe to stop robot");
+    
+     distance = brick.UltrasonicDist(1);
+   
+     if(distance > 40)
+       
+        %Turn Right
+        brick.MoveMotor('D', 30);
+        brick.MoveMotorAngleRel('B', 100, 1150, 'Brake');
+        pause(1.5);
+        brick.StopMotor('D');
+        brick.StopMotor('B');
+        pause(1.5)
+        
+        %Go Forward
+        brick.MoveMotor('D',-30);
+        brick.MoveMotor('B',-100);
+        pause(5);
+        brick.StopMotor('D');
+        brick.StopMotor('B');
+        pause(2);
+     end
+     
+     if(distance < 40)
+       %Turn Left
+        brick.MoveMotor('D', 30); %This line changes the direction in which the clutch moves, allowing sprocket to turn
+        brick.MoveMotorAngleRel('B', -100, 1100, 'Brake'); %90 degrees
+        pause(1.5);
+       end
+    
+end
 
+                 
 %TODO:
 % Clutch
 % The clutch is a bar with three gears at an angle where the last gear is
