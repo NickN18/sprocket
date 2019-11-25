@@ -51,8 +51,16 @@ end
 % reset when there is a wall present. While the gyro should always stay at
 % zero (theoretically) it is be if we reset it to zero every time.
 
-%myGyro = gyroSensor(EV33, 'A');
+%myGyro = gyroSensor(brick);
 %angle = resetRotationAngle(myGyro);
+
+brick.GyroAngle(2);
+pause(.1);
+
+% send a calibration command
+brick.inputReadSI(2, 4);
+pause(3);
+gyro_angle = brick.GyroAngle(2);
 
 %TODO:
 %Maze Algorithm
@@ -62,18 +70,25 @@ end
 distance = brick.UltrasonicDist(1);
 
 while(1==1)
-    
+     %gyro_angle = brick.GyroAngle(2);
+     pause(.1);
+     
      distance = brick.UltrasonicDist(1);
         if(distance > 40)
-       
             %Turn Right
-            brick.MoveMotor('D', 30);
-            brick.MoveMotorAngleRel('B', 100, 1150, 'Brake');
-            pause(1.5);
+            
+            while(gyro_angle >= -270)
+                gyro_angle = brick.GyroAngle(2);
+                pause(1);
+                brick.MoveMotor('D', 30);
+                brick.MoveMotor('B', -100);
+                disp(gyro_angle);
+            end
+            
             brick.StopMotor('D');
             brick.StopMotor('B');
-            pause(1.5)
-        
+            
+            
             %Go Forward
             brick.MoveMotor('D',-30);
             brick.MoveMotor('B',-100);
@@ -85,9 +100,17 @@ while(1==1)
      
         if(distance < 40)
             %Turn Left
-            brick.MoveMotor('D', 30); %This line changes the direction in which the clutch moves, allowing sprocket to turn
-            brick.MoveMotorAngleRel('B', -100, 1100, 'Brake'); %90 degrees
-            pause(1.5);
+            while(gyro_angle >= -90)
+                brick.MoveMotor('D', 30);
+                brick.MoveMotor('B', -100);
+                disp(gyro_angle);
+            end
+            
+            brick.StopMotor('D');
+            brick.StopMotor('B');
+            
+            gyro_angle = 0;
+            
         end
 end
 
