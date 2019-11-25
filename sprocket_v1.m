@@ -62,37 +62,33 @@ end
 distance = brick.UltrasonicDist(1);
 
 while(1==1)
-   
-     dir = input("Failsafe to stop robot");
     
      distance = brick.UltrasonicDist(1);
-   
-     if(distance > 40)
+        if(distance > 40)
        
-        %Turn Right
-        brick.MoveMotor('D', 30);
-        brick.MoveMotorAngleRel('B', 100, 1150, 'Brake');
-        pause(1.5);
-        brick.StopMotor('D');
-        brick.StopMotor('B');
-        pause(1.5)
+            %Turn Right
+            brick.MoveMotor('D', 30);
+            brick.MoveMotorAngleRel('B', 100, 1150, 'Brake');
+            pause(1.5);
+            brick.StopMotor('D');
+            brick.StopMotor('B');
+            pause(1.5)
         
-        %Go Forward
-        brick.MoveMotor('D',-30);
-        brick.MoveMotor('B',-100);
-        pause(5);
-        brick.StopMotor('D');
-        brick.StopMotor('B');
-        pause(2);
-     end
+            %Go Forward
+            brick.MoveMotor('D',-30);
+            brick.MoveMotor('B',-100);
+            pause(5);
+            brick.StopMotor('D');
+            brick.StopMotor('B');
+            pause(2);
+        end
      
-     if(distance < 40)
-       %Turn Left
-        brick.MoveMotor('D', 30); %This line changes the direction in which the clutch moves, allowing sprocket to turn
-        brick.MoveMotorAngleRel('B', -100, 1100, 'Brake'); %90 degrees
-        pause(1.5);
-       end
-    
+        if(distance < 40)
+            %Turn Left
+            brick.MoveMotor('D', 30); %This line changes the direction in which the clutch moves, allowing sprocket to turn
+            brick.MoveMotorAngleRel('B', -100, 1100, 'Brake'); %90 degrees
+            pause(1.5);
+        end
 end
 
                  
